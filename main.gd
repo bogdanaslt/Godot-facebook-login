@@ -31,7 +31,7 @@ func _on_login_pressed():
 		var result = client.request(client.METHOD_POST, "/v2.6/device/login", headers, query)
 		resp.parse_json(get_client_data().get_string_from_ascii())
 		popup.get_node("code").set_text(resp.user_code)
-		popup.get_node("link").set_text("Go to %s and enter code displayed below" % resp.verification_uri)
+		popup.get_node("link").set_text("Go to %s" % resp.verification_uri)
 		popup.show()
 	else:
 		get_facebook_user()
@@ -68,3 +68,10 @@ func get_facebook_user():
 	var user = {}
 	user.parse_json(get_client_data().get_string_from_ascii())
 	get_node("user_name").set_text(user.id + ":" + user.name)
+
+func _on_copy_pressed():
+	OS.set_clipboard(get_node("info_dialog/code").get_text())
+
+
+func _on_link_pressed():
+	OS.shell_open(resp.verification_uri)
